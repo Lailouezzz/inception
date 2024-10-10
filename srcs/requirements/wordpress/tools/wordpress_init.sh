@@ -3,7 +3,6 @@
 # Check if WordPress is already installed
 if [ ! -f "/var/www/html/wp-config.php" ]; then
 	echo "Configuring WordPress..."
-	echo bouffe mes couilles
 
 	# Configure WordPress
 	wp config create --allow-root					\

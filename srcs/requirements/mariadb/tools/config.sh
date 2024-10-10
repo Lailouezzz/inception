@@ -26,12 +26,3 @@ rm -f init.sql
 mysqladmin -u root -p${MDB_ROOT_PASSWORD} shutdown
 
 exec mysqld --bind-address=0.0.0.0
-
-# To check if mariadb isn't empty, use the following command:
-# docker exec -it mariadb bash
-# mysql -u root -p
-# SHOW DATABASES;
-# USE <database>;
-# SHOW TABLES;
-# SELECT <anything> FROM <table>;
-# EXIT;
