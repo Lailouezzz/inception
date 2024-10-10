@@ -1,0 +1,86 @@
+services:
+  nginx:
+    container_name: nginx
+    hostname: backend
+    build:
+      context: ./requirements/nginx
+    volumes:
+      - wordpress_volume:/var/www/html
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "443:443"
+    restart: always
+    networks:
+      - inception_network
+    healthcheck:
+      test: ["CMD-SHELL", "netcat -z nginx 443 || exit 1"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+
+  wordpress:
+    container_name: wordpress
+    hostname: wordpress
+    build:
+      context: ./requirements/wordpress
+    volumes:
+      - wordpress_volume:/var/www/html
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    expose:
+      - 9000
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - inception_network
+    healthcheck:
+      test: ["CMD-SHELL", "netcat -z wordpress 9000 || exit 1"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+
+  mariadb:
+    container_name: mariadb
+    hostname: mariadb
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    build:
+      context: ./requirements/mariadb
+    expose:
+      - 3306
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - inception_network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h mariadb -u${MDB_USER} -p${MDB_ROOT_PASSWORD} || exit 1"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mariadb_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ale-boud/data/mysql
+      o: bind
+
+  wordpress_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ale-boud/data/wordpress
+      o: bind
+
+networks:
+  inception_network:
+    name: inception_network
+    driver: bridge
