@@ -22,11 +22,11 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 					--skip-email					\
 					--allow-root
 
-	# # Create user
-	# wp user create	$WP_USER $WP_USER_EMAIL			\
-	# 				--role=subscriber				\
-	# 				--user_pass=$WP_USER_PWD		\
-	# 				--allow-root
+	# Create user
+	wp user create	$WP_USER $WP_USER_EMAIL			\
+					--role=subscriber				\
+					--user_pass=$WP_USER_PWD		\
+					--allow-root
 
 	wp option update home 'https://ale-boud.42.fr' --allow-root
 	wp option update siteurl 'https://ale-boud.42.fr' --allow-root

@@ -17,7 +17,7 @@ services:
     networks:
       - inception_network
     healthcheck:
-      test: ["CMD-SHELL", "netcat -z nginx 443 || exit 1"]
+      test: ["CMD-SHELL", "ping -c1 nginx || exit 1"]
       interval: 2s
       timeout: 10s
       retries: 5
